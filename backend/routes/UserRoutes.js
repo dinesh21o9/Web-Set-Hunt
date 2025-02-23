@@ -1,10 +1,8 @@
 const router = require('express').Router();
-const {register,login,updateDetails} = require('../controllers/UserController')
+const {register,login,updateDetails,protectRoute} = require('../controllers/UserController')
 
 router.post("/register",register);
 router.post("/login",login);
-router.put("/profile",updateDetails)
+router.put("/profile", protectRoute, updateDetails)
 
 module.exports = router;
-
-

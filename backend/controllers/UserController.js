@@ -7,15 +7,8 @@ const jwt = require("jsonwebtoken");
 module.exports.register = async (req, res, next) => {
   try {
     // console.log(req.body);
-    const { email, password, confirmPassword } = req.body;
-
-    // Validate if confirmPassword is present in the request body
-    if (!confirmPassword) {
-      return res.json({
-        msg: "Confirm Password is required",
-        status: false,
-      });
-    }
+    const { email, password, confirmPassword, username, rollNo, mobileNo } =
+      req.body;
 
     const emailCheck = await User.findOne({ email });
     if (emailCheck) {
@@ -25,17 +18,12 @@ module.exports.register = async (req, res, next) => {
       });
     }
 
-    if (password != confirmPassword) {
-      return res.json({
-        msg: "Confirm Password doesn't match",
-        status: false,
-      });
-    }
-
     const user = await User.create({
       email,
       password,
-      confirmPassword, //Remove this line
+      username,
+      rollNo,
+      mobileNo,
     });
 
     const random = await user.save();
@@ -104,59 +92,37 @@ module.exports.login = async (req, res, next) => {
 
 //update details
 
-module.exports.updateDetails = async (req, res, next) => {
-  try {
-    const { username, rollNo, mobileNo, email, password } = req.body;
-    if (!email) {
-      return res.json({
-        msg: "User is not found",
-        status: false,
-      });
-    }
-
-    const updatedUser = await User.findOneAndUpdate(
-      { email: email },
-      {
-        username: username,
-        rollNo: rollNo,
-        mobileNo: mobileNo,
-        password: password,
-      },
-      { new: true }
-    );
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    return res.json({
-      msg: "User info updated successfully",
-      updatedUser,
-      status: true,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// module.exports.protectRoute = async (req, res, next) => {
-//   console.log(req.headers);
-//   if (req.headers.authorization) {
-//     console.log(req.headers.authorization);
-//     let isVerifiedUser = jwt.verify(
-//       req.headers.authorization,
-//       process.env.JWT_KEY
-//     );
-//     if (isVerifiedUser) {
-//       next();
-//     } else {
+// module.exports.updateDetails = async (req, res, next) => {
+//   try {
+//     const { username, rollNo, mobileNo, email, password } = req.body;
+//     if (!email) {
 //       return res.json({
-//         message: "User is not verified",
+//         msg: "User is not found",
+//         status: false,
 //       });
 //     }
-//   } else {
+
+//     const updatedUser = await User.findOneAndUpdate(
+//       { email: email },
+//       {
+//         username: username,
+//         rollNo: rollNo,
+//         mobileNo: mobileNo,
+//         password: password,
+//       },
+//       { new: true }
+//     );
+//     if (!updatedUser) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
 //     return res.json({
-//       message: "Operation not allowed",
+//       msg: "User info updated successfully",
+//       updatedUser,
+//       status: true,
 //     });
+//   } catch (error) {
+//     next(error);
 //   }
 // };
 
@@ -192,4 +158,4 @@ module.exports.protectRoute = async (req, res, next) => {
   }
 };
 
-module.exports.checkTeam = async (req, res, next) => {};
+// module.exports.checkTeam = async (req, res, next) => {};

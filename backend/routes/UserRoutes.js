@@ -3,6 +3,6 @@ const {register,login,updateDetails,protectRoute} = require('../controllers/User
 
 router.post("/register",register);
 router.post("/login",login);
-router.put("/profile", protectRoute, updateDetails)
+// router.put("/profile", protectRoute, updateDetails)
 
 module.exports = router;

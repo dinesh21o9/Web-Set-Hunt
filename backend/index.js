@@ -35,7 +35,6 @@ app.use(cookieParser());
 app.use("/api/auth", userRoutes);
 app.use("/api/teamdetails", teamRoutes);
 app.use("/api/leaderboard", leaderRoutes);
-
 app.use("/api/dashboard", quizRoutes);
 app.use("/api/que", quesRoutes);
 

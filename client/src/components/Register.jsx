@@ -63,7 +63,9 @@ const Register = () => {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Registration failed');
+      if (!response.ok || data.status === false) {
+        throw new Error(data.msg || 'Registration failed');
+      }
 
       toast.success('Registration successful!');
       navigate('/lobby');

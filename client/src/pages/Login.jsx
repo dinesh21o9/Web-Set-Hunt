@@ -36,11 +36,13 @@ const Login = () => {
 
       const data = await response.json();
       if (!response.ok || data.status === false) {
+        console.log(data);
         throw new Error(data.message || "Logging in failed");
       }
-      console.log(data);
+      // console.log(data);
       toast("Logged in successfully!");
       navigate("/lobby");
+
     } catch (error) {
       toast(error.message);
     } finally {

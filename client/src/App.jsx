@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useState, useEffect} from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
@@ -20,12 +20,28 @@ if (time.getSeconds() > 0) {
   seconds = 60 - time.getSeconds();
 }
 
-const isAuthenticated = () => {
-  return localStorage.getItem("token") !== null;
+const isAuthenticated = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/auth/check", {
+      method: "GET",
+      credentials: 'include', 
+    });
+    const data = await response.json();
+    return data.isAuthenticated;
+  } catch (error) {
+    return false;
+  }
 };
 
 const ProtectedRoute = ({ element }) => {
-  return isAuthenticated() ? element : <Navigate to="/login" />;
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    isAuthenticated().then(setAuth(true));
+  }, []);
+
+  if (auth === false) return <div>Loading...</div>;
+  return auth ? element : <Navigate to="/login" />;
 };
 
 const App = () => {

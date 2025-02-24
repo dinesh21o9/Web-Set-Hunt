@@ -5,6 +5,10 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const port = process.env.PORT || 3000;
+const corsOptions = {
+  origin: "http://localhost:5173", 
+  credentials: true, 
+};
 
 // Import routes
 const leaderRoutes = require("./routes/LeaderRoutes");
@@ -26,7 +30,7 @@ mongoose
   });
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());

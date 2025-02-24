@@ -4,20 +4,25 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = e.target;
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.value || !password.value || !confirmPassword.value) {
-      toast("All fields are required");
+
+    if (!formData.email || !formData.password) {
+      toast.error("All fields are required");
       return;
     }
 
-    if (!emailPattern.test(email.value)) {
-      toast("Invalid email format");
+    if (!emailPattern.test(formData.email)) {
+      toast.error("Invalid email format");
       return;
     }
 
@@ -26,13 +31,15 @@ const Login = () => {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.value, password: password.value }),
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Logging In failed");
-
-      toast("Logged In successfully!");
+      if (!response.ok || data.status === false) {
+        throw new Error(data.message || "Logging in failed");
+      }
+      console.log(data);
+      toast("Logged in successfully!");
       navigate("/lobby");
     } catch (error) {
       toast(error.message);
@@ -60,6 +67,8 @@ const Login = () => {
                 id="email"
                 name="email"
                 type="email"
+                value={formData.email}
+                onChange={handleChange}
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
@@ -75,6 +84,8 @@ const Login = () => {
                 id="password"
                 name="password"
                 type="password"
+                value={formData.password}
+                onChange={handleChange}
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
@@ -86,7 +97,7 @@ const Login = () => {
             disabled={isLoading}
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Logining..." : "Login"}
+            {isLoading ? "Logging in..." : "Login"}
           </button>
           <div className="text-sm text-center">
             <button

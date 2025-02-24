@@ -107,3 +107,107 @@ export const Signup = () => {
     </div>
   );
 };
+
+
+
+
+
+
+
+
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+const ERROR_MESSAGES = {
+  EMAIL_USED: 'Email Already used',
+  PASSWORD_MISMATCH: "Confirm Password doesn't match",
+  PASSWORD_REQUIRED: 'Confirm Password is required',
+  REGISTRATION_SUCCESS: 'User registered successfully'
+};
+
+const ROUTES = {
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  LOBBY: '/lobby/team'
+};
+
+export const RegistrationHandler = () => {
+  const navigate = useNavigate();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const repasswordRef = useRef();
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      navigate('/lobby', { replace: true });
+    }
+  }, [navigate]);
+
+  const handleUserStorage = (data) => {
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    const { user, token } = data;
+    
+    localStorage.setItem('email', user.email);
+    localStorage.setItem('userId', user._id);
+    
+    if (data.status) {
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('userid', user._id);
+    }
+  };
+
+  const handleRegistrationResponse = (data) => {
+    const { msg } = data;
+
+    switch (msg) {
+      case ERROR_MESSAGES.EMAIL_USED:
+        navigate(ROUTES.LOGIN);
+        toast.error(msg);
+        break;
+      case ERROR_MESSAGES.PASSWORD_MISMATCH:
+      case ERROR_MESSAGES.PASSWORD_REQUIRED:
+        navigate(ROUTES.SIGNUP);
+        toast.error(msg);
+        break;
+      case ERROR_MESSAGES.REGISTRATION_SUCCESS:
+        navigate(ROUTES.LOBBY);
+        toast.success(msg);
+        break;
+      default:
+        navigate(ROUTES.SIGNUP);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      confirmPassword: repasswordRef.current.value
+    };
+
+    try {
+      const { data } = await axios.post(
+        `${API_URL}/api/auth/register`,
+        formData
+      );
+
+      handleUserStorage(data);
+      handleRegistrationResponse(data);
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error('Registration error:', errorMessage);
+      toast.error(errorMessage);
+    }
+  };
+
+  return { handleSubmit };
+};

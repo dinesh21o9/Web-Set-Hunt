@@ -21,11 +21,6 @@ const Login = () => {
       return;
     }
 
-    if (password.value !== confirmPassword.value) {
-      toast('Passwords do not match');
-      return;
-    }
-
     setIsLoading(true);
     try {
       const response = await fetch('http://localhost:5000/api/auth/login', {
@@ -35,12 +30,12 @@ const Login = () => {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Registration failed');
+      if (!response.ok) throw new Error(data.message || 'Logging In failed');
 
-      toast.success('Logged In successfully!');
+      toast('Logged In successfully!');
       navigate('/lobby');
     } catch (error) {
-      toast.error(error.message);
+      toast(error.message);
     } finally {
       setIsLoading(false);
     }

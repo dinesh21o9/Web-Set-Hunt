@@ -1,7 +1,7 @@
 import React from "react";
 
 const Lobby = () => {
-  return <div>Hello wporld</div>;
+  return <div>Hello world</div>;
 };
 
 export default Lobby;

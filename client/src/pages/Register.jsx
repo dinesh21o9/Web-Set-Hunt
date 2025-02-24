@@ -77,16 +77,14 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-100 px-4">
-      <div className="max-w-md w-full bg-white p-6 rounded-xl shadow-lg space-y-6">
-        <h2 className="text-center text-3xl font-bold text-gray-900">
+    <div className="font-mono min-h-screen w-full flex items-center justify-center bg-black px-4">
+      <div className="max-w-md w-full bg-black/90 p-6 rounded-xl shadow-lg space-y-6 border border-green-600">
+        <h2 className="text-center text-3xl font-bold text-white">
           Create Your Account
         </h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Username
-            </label>
+            <label className="block text-sm font-medium text-white">Username</label>
             <input
               id="username"
               name="username"
@@ -94,13 +92,12 @@ const Register = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm 
+                       opacity-75 text-white focus:outline-none focus:ring-green-500 focus:border-green-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email Address
-            </label>
+            <label className="block text-sm font-medium text-white">Email Address</label>
             <input
               id="email"
               name="email"
@@ -108,41 +105,42 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm 
+                       opacity-75 text-white focus:outline-none focus:ring-green-500 focus:border-green-500"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Roll Number
-            </label>
-            <input
-              id="rollNo"
-              name="rollNo"
-              type="text"
-              value={formData.rollNo}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
+          <div className="flex space-x-4">
+            <div className="w-1/2">
+              <label className="block text-sm font-medium text-white">Roll Number</label>
+              <input
+                id="rollNo"
+                name="rollNo"
+                type="text"
+                value={formData.rollNo}
+                onChange={handleChange}
+                required
+                className="mt-1 w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm 
+                 opacity-75 text-white focus:outline-none focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
+            <div className="w-1/2">
+              <label className="block text-sm font-medium text-white">Mobile Number</label>
+              <input
+                id="mobileNo"
+                name="mobileNo"
+                type="text"
+                value={formData.mobileNo}
+                onChange={handleChange}
+                required
+                className="mt-1 w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm 
+                 opacity-75 text-white focus:outline-none focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
           </div>
+
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Mobile Number
-            </label>
-            <input
-              id="mobileNo"
-              name="mobileNo"
-              type="text"
-              value={formData.mobileNo}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-white">Password</label>
             <input
               id="password"
               name="password"
@@ -150,13 +148,12 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm 
+                        opacity-75 text-white focus:outline-none focus:ring-green-500 focus:border-green-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
+            <label className="block text-sm font-medium text-white">Confirm Password</label>
             <input
               id="confirmPassword"
               name="confirmPassword"
@@ -164,23 +161,25 @@ const Register = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm 
+                       opacity-75 text-white focus:outline-none focus:ring-green-500 focus:border-green-500"
             />
           </div>
           <ToastContainer />
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+            className="w-full py-2 px-4 bg-green-600 text-white font-medium rounded-md shadow-sm 
+                     hover:bg-green-700 focus:ring-2 focus:ring-green-500 disabled:opacity-50"
           >
             {isLoading ? "Registering..." : "Register"}
           </button>
-          <p className="text-sm text-center">
+          <p className="text-sm text-center text-green-600">
             Already have an account?{" "}
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="text-indigo-600 hover:text-indigo-500 font-medium"
+              className="text-green-600 hover:text-green-500 font-medium"
             >
               Sign in
             </button>

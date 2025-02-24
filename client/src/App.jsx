@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Landing from "../pages/Landing";
-import Register from "../pages/Register";
-import Login from "../pages/Login";
-import Lobby from "../pages/Lobby";
+import Landing from "./pages/Landing";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Lobby from "./pages/Lobby";
 
 const time = new Date();
 let hours = 21 - time.getHours();

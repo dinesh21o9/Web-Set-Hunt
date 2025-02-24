@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,28 +12,28 @@ const Login = () => {
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.value || !password.value || !confirmPassword.value) {
-      toast('All fields are required');
+      toast("All fields are required");
       return;
     }
 
     if (!emailPattern.test(email.value)) {
-      toast('Invalid email format');
+      toast("Invalid email format");
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.value, password: password.value })
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.value, password: password.value }),
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Logging In failed');
+      if (!response.ok) throw new Error(data.message || 'Registration failed');
 
-      toast('Logged In successfully!');
-      navigate('/lobby');
+      toast("Logged In successfully!");
+      navigate("/lobby");
     } catch (error) {
       toast(error.message);
     } finally {

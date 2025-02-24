@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 module.exports.register = async (req, res, next) => {
   try {
     // console.log(req.body);
-    const { email, password, username, rollNo, mobileNo } =
+    const { email, password, confirmPassword, username, rollNo, mobileNo } =
       req.body;
 
     const emailCheck = await User.findOne({ email });
@@ -27,7 +27,6 @@ module.exports.register = async (req, res, next) => {
     });
 
     const random = await user.save();
-    console.log(random);
     let uid = user["_id"];
     let token = jwt.sign({ payload: uid }, process.env.JWT_KEY);
     res.cookie("login", token);

@@ -5,7 +5,6 @@ import { Leaderboard} from './Leaderboard';
 import axios from 'axios'; // Import axios for making HTTP requests
 
 import "../../css/Dashboard.scss";
-import { Navigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export const Dashboard = ({ initialTime }) => {

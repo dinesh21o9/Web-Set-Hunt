@@ -14,8 +14,8 @@ const corsOptions = {
 const leaderRoutes = require("./routes/LeaderRoutes");
 const quesRoutes = require("./routes/QuesRoutes");
 const quizRoutes = require("./routes/QuizRoutes");
-const teamRoutes = require("./routes/TeamRoutes");
-const userRoutes = require("./routes/UserRoutes");
+// const teamRoutes = require("./routes/TeamRoutes");
+// const userRoutes = require("./routes/UserRoutes");
 
 const app = express();
 
@@ -36,8 +36,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use("/api/auth", userRoutes);
-app.use("/api/teamdetails", teamRoutes);
+// app.use("/api/auth", userRoutes);
+// app.use("/api/teamdetails", teamRoutes);
 app.use("/api/leaderboard", leaderRoutes);
 app.use("/api/dashboard", quizRoutes);
 app.use("/api/que", quesRoutes);

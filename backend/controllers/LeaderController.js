@@ -1,4 +1,3 @@
-const Team = require("../model/TeamModel");
 const User = require("../model/UserModel");
 
 module.exports.getWinners = async (req, res, next) => {

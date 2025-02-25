@@ -5,6 +5,16 @@ import { Outlet } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
 import Leaderboard from "../components/Leaderboard";
 
+
+const handleLogout = async () => {
+  await fetch("http://localhost:5000/api/auth/logout", {
+    method: "POST",
+    credentials: "include", // Important to clear cookies
+  });
+  window.location.href = "/login"; // Redirect to login page
+};
+
+
 const Lobby = () => {
   const time = new Date();
   let hours = 21 - time.getHours();

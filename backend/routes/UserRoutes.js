@@ -1,8 +1,21 @@
-const router = require('express').Router();
-const {register,login,updateDetails,protectRoute} = require('../controllers/UserController')
+const router = require("express").Router();
+const {
+  register,
+  login,
+  check,
+  updateDetails,
+  protectRoute,
+} = require("../controllers/UserController");
 
-router.post("/register",register);
-router.post("/login",login);
+router.get("/check", check);
+router.post("/register", register);
+router.post("/login", login);
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("login");
+  res.clearCookie("userid");
+  res.json({ msg: "Logged out successfully", status: true });
+});
 // router.put("/profile", protectRoute, updateDetails)
 
 module.exports = router;

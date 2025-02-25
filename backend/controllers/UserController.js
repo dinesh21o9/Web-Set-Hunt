@@ -6,8 +6,7 @@ const jwt = require("jsonwebtoken");
 //registeration
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password, username, rollNo, mobileNo } =
-      req.body;
+    const { email, password, username, rollNo, mobileNo } = req.body;
 
     const emailCheck = await User.findOne({ email });
     if (emailCheck) {
@@ -42,49 +41,101 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.login = async (req, res, next) => {
   try {
-    console.log(req.body);
     const { email, password } = req.body;
     const userData = await User.findOne({ email });
+
     if (!userData) {
-      return res.json({
-        msg: "User Not found",
+      return res.status(404).json({
+        msg: "User Not Found",
         status: false,
       });
     }
 
     const isPasswordValid = await bcrypt.compare(password, userData.password);
-    if (isPasswordValid) {
-      let uid = userData["_id"];
-      let token = jwt.sign({ payload: uid }, process.env.JWT_KEY);
-      res.cookie("login", token);
-      res.cookie("userid", uid, { httpOnly: true });
-
-      const team = await Team.findOne({ members: userData._id });
-      if (!team) {
-        return res.json({
-          msg: "User has logged in but is not a member of any team",
-          status: true,
-          team: false,
-          userDetails: userData,
-          token,
-        });
-      }
-
-      return res.json({
-        msg: "User logged in and joined a team",
-        userDetails: userData,
-        status: true,
-        team: team,
-        token,
-      });
-    } else {
-      return res.json({
+    if (!isPasswordValid) {
+      return res.status(401).json({
         msg: "Incorrect Password",
         status: false,
       });
     }
+
+    let uid = userData["_id"];
+    let token = jwt.sign({ payload: uid }, process.env.JWT_KEY, {
+      expiresIn: "2h",
+    });
+
+    // console.log("NODE_ENV : " + process.env.NODE_ENV);
+
+    // Set cookies securely
+    res.cookie("login", token, {
+      httpOnly: true, // ✅ Prevents access via JavaScript (XSS protection).
+                      // ⬆️ Should ALWAYS be true for security.
+
+      secure: process.env.NODE_ENV === "production",
+                      // ✅ Ensures the cookie is sent only over HTTPS.
+                      // ⬆️ Should be false in development (localhost) and true in production.
+
+      sameSite: "lax", // ✅ Helps protect against CSRF attacks.
+                       // ⬆️ "Lax" is a good default for authentication cookies.
+                       // ⬆️ Use "Strict" for stronger security but may affect UX.
+                       // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
+
+      path: "/",  // ✅ Makes the cookie available across the entire domain.
+                  // ⬆️ Typically "/", unless restricting to specific paths.
+
+      maxAge: 2 * 3600000, // ✅ Specifies cookie expiration time (2 hours).
+                           // ⬆️ Adjust based on session requirements.
+    });
+
+    // Set another secure cookie for user ID
+    res.cookie("userid", uid, {
+      httpOnly: true, // ✅ Prevents access via JavaScript (XSS protection).
+                      // ⬆️ Should ALWAYS be true for security.
+
+      secure: process.env.NODE_ENV === "production",
+                      // ✅ Ensures the cookie is sent only over HTTPS.
+                      // ⬆️ Should be false in development (localhost) and true in production.
+
+      sameSite: "lax", // ✅ Helps protect against CSRF attacks.
+                       // ⬆️ "Lax" is a good default for authentication cookies.
+                       // ⬆️ Use "Strict" for stronger security but may affect UX.
+                       // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
+
+      path: "/",  // ✅ Makes the cookie available across the entire domain.
+                  // ⬆️ Typically "/", unless restricting to specific paths.
+     
+      maxAge: 2 * 3600000, // ✅ Specifies cookie expiration time (2 hours).
+                           // ⬆️ Adjust based on session requirements.
+    });
+
+    const team = await Team.findOne({ members: userData._id });
+
+    return res.status(200).json({
+      msg: team
+        ? "User logged in and joined a team"
+        : "User logged in but is not a member of any team",
+      userDetails: userData,
+      status: true,
+      team: team || false,
+      token,
+    });
   } catch (error) {
     next(error);
+  }
+};
+
+module.exports.check = async (req, res, next) => {
+  try {
+    const token = req.cookies.login;
+
+    if (!token) {
+      return res.json({ isAuthenticated: false });
+    }
+
+    jwt.verify(token, process.env.JWT_KEY);
+    return res.json({ isAuthenticated: true });
+  } catch (error) {
+    return res.json({ isAuthenticated: false, error: error.message });
   }
 };
 

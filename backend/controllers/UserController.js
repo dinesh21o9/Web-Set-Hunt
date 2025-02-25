@@ -16,11 +16,11 @@ module.exports.register = async (req, res, next) => {
       });
     }
 
-    const teamCode = randomstring.generate({
-      length: 6,
-      charset: "alphanumeric",
-      capitalization: "uppercase",
-    });
+    // const teamCode = randomstring.generate({
+    //   length: 6,
+    //   charset: "alphanumeric",
+    //   capitalization: "uppercase",
+    // });
 
     const user = await User.create({
       teamLeaderName,
@@ -29,7 +29,7 @@ module.exports.register = async (req, res, next) => {
       password,
       rollNo,
       mobileNo,
-      teamCode,
+      // teamCode,
       score: 0,
     });
 

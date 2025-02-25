@@ -11,10 +11,10 @@ const corsOptions = {
 };
 
 // Import routes
-const leaderRoutes = require("./routes/LeaderRoutes");
-const quesRoutes = require("./routes/QuesRoutes");
-const quizRoutes = require("./routes/QuizRoutes");
-const teamRoutes = require("./routes/TeamRoutes");
+// const leaderRoutes = require("./routes/LeaderRoutes");
+// const quesRoutes = require("./routes/QuesRoutes");
+// const quizRoutes = require("./routes/QuizRoutes");
+// const teamRoutes = require("./routes/TeamRoutes");
 const userRoutes = require("./routes/UserRoutes");
 
 const app = express();
@@ -37,10 +37,10 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", userRoutes);
-app.use("/api/teamdetails", teamRoutes);
-app.use("/api/leaderboard", leaderRoutes);
-app.use("/api/dashboard", quizRoutes);
-app.use("/api/que", quesRoutes);
+// app.use("/api/teamdetails", teamRoutes);
+// app.use("/api/leaderboard", leaderRoutes);
+// app.use("/api/dashboard", quizRoutes);
+// app.use("/api/que", quesRoutes);
 
 // Start server
 app.listen(port, () => {

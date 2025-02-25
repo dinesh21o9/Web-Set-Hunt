@@ -98,7 +98,7 @@ const Lobby = () => {
       {/* Main Content */}
       <main className="relative z-10 flex-1 p-4 md:p-8">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-black/60 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-green-600/30">
+          <div className="bg-black/60 backdrop-blur-sm rounded-sm shadow-2xl overflow-hidden border border-green-600/30">
             {/* Content Header */}
             <div className="bg-green-600 py-4 px-6 flex justify-between items-center">
               <h2 className="text-xl md:text-2xl font-bold">

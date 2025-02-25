@@ -6,7 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: "",
+    teamName: "",
+    teamLeaderName: "",
     email: "",
     rollNo: "",
     mobileNo: "",
@@ -55,7 +56,8 @@ const Register = () => {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          username: formData.username,
+          teamName: formData.teamName,
+          teamLeaderName: formData.teamLeaderName,
           email: formData.email,
           rollNo: formData.rollNo,
           mobileNo: formData.mobileNo,
@@ -85,12 +87,25 @@ const Register = () => {
         </h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-white">Username</label>
+            <label className="block text-sm font-medium text-white">Team Name</label>
             <input
-              id="username"
-              name="username"
+              id="teamName"
+              name="teamName"
               type="text"
-              value={formData.username}
+              value={formData.teamName}
+              onChange={handleChange}
+              required
+              className="mt-1 w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm 
+                       opacity-75 text-white focus:outline-none focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-white">Team Leader Name</label>
+            <input
+              id="teamLeaderName"
+              name="teamLeaderName"
+              type="text"
+              value={formData.teamLeaderName}
               onChange={handleChange}
               required
               className="mt-1 w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm 

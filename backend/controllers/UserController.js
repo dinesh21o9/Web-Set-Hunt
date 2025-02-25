@@ -181,28 +181,13 @@ module.exports.check = async (req, res, next) => {
 
 module.exports.protectRoute = async (req, res, next) => {
   try {
-    console.log(req.headers);
+    const token = req.cookies.login;
 
-    if (
-      !req.headers.authorization
-      //   !req.headers.authorization.startsWith("Bearer ")
-    ) {
-      return res
-        .status(401)
-        .json({ message: "Operation not allowed, token missing" });
+    if (!token) {
+      return res.json({ isAuthenticated: false });
     }
 
-    const token = req.headers.authorization;
-    console.log(token);
-    // const token = req.headers.authorization.split(" ")[1];
-
-    const isVerifiedUser = jwt.verify(token, process.env.JWT_KEY);
-
-    if (!isVerifiedUser) {
-      return res.status(401).json({ message: "User is not verified" });
-    }
-
-    // req.user = isVerifiedUser;
+    jwt.verify(token, process.env.JWT_KEY);
 
     next();
   } catch (error) {

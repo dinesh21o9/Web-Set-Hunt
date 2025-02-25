@@ -1,39 +1,51 @@
 import React from "react";
 import clsx from "clsx";
 
-export const Navbar = ({ setActiveTab }) => {
+export const Navbar = ({ setActiveTab, activeTab, onLogout }) => {
   const navItems = [
-    { name: "Dashboard", key: "dashboard", icon: "homeIcon.png" },
-    { name: "Leaderboard", key: "leaderboard", icon: "leaderboardIcon.png" },
-    { name: "Team", key: "team", icon: "teamIcon.png" },
+    { name: "Dashboard", key: "dashboard", icon: "dashboard.svg" },
+    { name: "Leaderboard", key: "leaderboard", icon: "leaderboard.svg" },
+    { name: "Team", key: "team", icon: "profile.svg" },
   ];
-
+  
   return (
-    <div className="fixed left-0 top-auto bottom-12 h-2/3 w-20 flex flex-col gap-6 py-6 items-center bg-black text-white shadow-lg">
-      {/* Logo */}
-      <div className="w-16 h-16">
-        <img src="micro.png" alt="Logo" className="object-contain" />
-      </div>
-
+    <div className="flex items-center gap-3">
       {/* Navigation Items */}
-      <div className="flex flex-col gap-6">
+      <div className="flex items-center bg-white backdrop-blur-sm rounded-full px-2 py-1 shadow-lg gap-2">
         {navItems.map(({ name, key, icon }) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className="relative flex items-center justify-center p-3 rounded-full transition-all duration-300 hover:bg-gray-500/50"
+            className={clsx(
+              "relative flex items-center justify-center p-2 rounded-full transition-all duration-300",
+              activeTab === key 
+                ? "bg-green-300 text-black" 
+                : "text-black hover:bg-gray-200"
+            )}
+            title={name}
           >
-            <img className="w-9 h-9" src={`navbar/${icon}`} alt={name} />
+            <img 
+              className="w-6 h-6" 
+              src={`navbar/${icon}`} 
+              alt={name} 
+            />
+            <span className="ml-2 hidden md:block">{name}</span>
           </button>
         ))}
       </div>
-
+      
       {/* Logout Button */}
-      <div className="mt-auto">
-        <button className="relative flex items-center justify-center p-3 rounded-full transition-all duration-300 hover:bg-red-500">
-          <img className="w-9 h-9" src="navbar/logoutIcon.png" alt="Logout" />
-        </button>
-      </div>
+      <button 
+        onClick={onLogout}
+        className="flex items-center justify-center p-2 rounded-full bg-white hover:bg-red-500 transition-all duration-300"
+        title="Logout"
+      >
+        <img 
+          className="w-6 h-6" 
+          src="navbar/logout.svg" 
+          alt="Logout" 
+        />
+      </button>
     </div>
   );
 };

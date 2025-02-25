@@ -1,5 +1,4 @@
 const User = require("../model/UserModel");
-// const Team = require("../model/TeamModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -17,11 +16,11 @@ module.exports.register = async (req, res, next) => {
       });
     }
 
-    const teamCode = randomstring.generate({
-      length: 6,
-      charset: "alphanumeric",
-      capitalization: "uppercase",
-    });
+    // const teamCode = randomstring.generate({
+    //   length: 6,
+    //   charset: "alphanumeric",
+    //   capitalization: "uppercase",
+    // });
 
     const user = await User.create({
       teamLeaderName,
@@ -30,13 +29,33 @@ module.exports.register = async (req, res, next) => {
       password,
       rollNo,
       mobileNo,
-      teamCode,
+      // teamCode,
       score: 0,
     });
 
     let uid = user["_id"];
     let token = jwt.sign({ payload: uid }, process.env.JWT_KEY);
-    res.cookie("login", token);
+
+    res.cookie("wshToken", token, {
+      httpOnly: true, // Prevents access via JavaScript (XSS protection).
+      // ⬆️ Should ALWAYS be true for security.
+
+      secure: process.env.NODE_ENV === "production",
+      // Ensures the cookie is sent only over HTTPS.
+      // ⬆️ Should be false in development (localhost) and true in production.
+
+      sameSite: "lax", // Helps protect against CSRF attacks.
+      // ⬆️ "Lax" is a good default for authentication cookies.
+      // ⬆️ Use "Strict" for stronger security but may affect UX.
+      // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
+
+      path: "/", // Makes the cookie available across the entire domain.
+      // ⬆️ Typically "/", unless restricting to specific paths.
+
+      maxAge: 2 * 3600000, // Specifies cookie expiration time (2 hours).
+      // ⬆️ Adjust based on session requirements.
+    });
+
     return res.status(201).json({
       msg: "User registered successfully",
       status: true,
@@ -76,7 +95,7 @@ module.exports.login = async (req, res, next) => {
     // console.log("NODE_ENV : " + process.env.NODE_ENV);
 
     // Set cookies securely
-    res.cookie("login", token, {
+    res.cookie("wshToken", token, {
       httpOnly: true, // Prevents access via JavaScript (XSS protection).
       // ⬆️ Should ALWAYS be true for security.
 
@@ -96,37 +115,13 @@ module.exports.login = async (req, res, next) => {
       // ⬆️ Adjust based on session requirements.
     });
 
-    // Set another secure cookie for user ID
-    res.cookie("userid", uid, {
-      httpOnly: true, // Prevents access via JavaScript (XSS protection).
-      // ⬆️ Should ALWAYS be true for security.
-
-      secure: process.env.NODE_ENV === "production",
-      // Ensures the cookie is sent only over HTTPS.
-      // ⬆️ Should be false in development (localhost) and true in production.
-
-      sameSite: "lax", // Helps protect against CSRF attacks.
-      // ⬆️ "Lax" is a good default for authentication cookies.
-      // ⬆️ Use "Strict" for stronger security but may affect UX.
-      // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
-
-      path: "/", // Makes the cookie available across the entire domain.
-      // ⬆️ Typically "/", unless restricting to specific paths.
-
-      maxAge: 2 * 3600000, // Specifies cookie expiration time (2 hours).
-      // ⬆️ Adjust based on session requirements.
-    });
-
-    const team = await Team.findOne({ members: userData._id });
+    // const team = await Team.findOne({ members: userData._id });
 
     return res.status(200).json({
-      msg: team
-        ? "User logged in and joined a team"
-        : "User logged in but is not a member of any team",
+      msg: "User logged in successfully",
       userDetails: userData,
       status: true,
-      team: team || false,
-      token,
+      token, // Remove later
     });
   } catch (error) {
     next(error);
@@ -135,7 +130,7 @@ module.exports.login = async (req, res, next) => {
 
 module.exports.check = async (req, res, next) => {
   try {
-    const token = req.cookies.login;
+    const token = req.cookies.wshToken;
 
     if (!token) {
       return res.json({ isAuthenticated: false });

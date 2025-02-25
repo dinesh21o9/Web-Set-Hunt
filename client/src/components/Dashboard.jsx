@@ -63,7 +63,7 @@ const Dashboard = ({ initialTime }) => {
 
   if (!teamJoined) {
     return (
-      <div className="text-center p-8 text-white text-4xl w-full max-w-md flex flex-col rounded-lg bg-white/10 gap-12">
+      <div className="flex justify-center items-center text-center p-8 text-white text-4xl w-full max-w-md flex flex-col rounded-lg bg-white/10 gap-12">
         Join the team to start Web Set Hunt
       </div>
     );

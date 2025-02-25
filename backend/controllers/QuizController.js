@@ -1,7 +1,8 @@
 // const Quiz = require("../model/QuizModel");
 const Question = require("../model/QuestionModel");
-const Users = require("../model/UserModel");
+const User = require("../model/UserModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 // const Team = require("../model/TeamModel");
 
 module.exports.fetchQuestion = async (req, res, next) => {

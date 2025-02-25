@@ -143,6 +143,15 @@ module.exports.check = async (req, res, next) => {
   }
 };
 
+module.exports.logout = async (req, res, next) => {
+  try {
+    res.clearCookie("wshToken");
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Logout failed" });
+  }
+};
+
 //update details
 
 // module.exports.updateDetails = async (req, res, next) => {
@@ -181,7 +190,7 @@ module.exports.check = async (req, res, next) => {
 
 module.exports.protectRoute = async (req, res, next) => {
   try {
-    const token = req.cookies.login;
+    const token = req.cookies.wshToken;
 
     if (!token) {
       return res.json({ isAuthenticated: false });

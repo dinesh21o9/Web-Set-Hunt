@@ -6,41 +6,46 @@ const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showUserDetails, setShowUserDetails] = useState(false);
-  const [selfEntry, setSelfEntry] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [selfRank, setSelfRank] = useState(0);
 
   useEffect(() => {
-    const fetchLeaderboard = async () => {
+    const fetchData = async () => {
       try {
+        const userResponse = await axios.get(
+          "http://localhost:5000/api/leaderboard/current",
+          { withCredentials: true }
+        );
+        const userId = userResponse.data;
+        setCurrentUserId(userId);
+
         const { data } = await axios.get(
-          "http://localhost:5000/api/leaderboard/winners"
+          "http://localhost:5000/api/leaderboard/winners",
+          { withCredentials: true }
         );
 
-        const sortedEntries = data
-          .sort(
-            (a, b) =>
-              (b.score ?? 0) - (a.score ?? 0) ||
-              new Date(b.updatedAt) - new Date(a.updatedAt)
-          )
-          .map((entry, index) => ({ ...entry, rank: index + 1 }));
+        const sortedEntries = data.map((entry, index) => ({
+          ...entry,
+          rank: index + 1,
+        }));
 
         setLeaderboard(sortedEntries);
 
-        const userId = localStorage.getItem("userId");
-        const userEntry = sortedEntries.find((entry) =>
-          entry.members.includes(userId)
-        );
+        const rankFinder = sortedEntries.find((team) => team._id === userId);
 
-        setSelfEntry(userEntry || sortedEntries[0]);
-        setShowUserDetails(!!userEntry);
+        const rank = rankFinder.rank;
+        if (rank > 0) {
+          setSelfRank(rank);
+        }
       } catch (err) {
+        console.error("Error fetching data:", err);
         setError(err.message || "Something went wrong!");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchLeaderboard();
+    fetchData();
   }, []);
 
   if (isLoading) {
@@ -61,18 +66,18 @@ const Leaderboard = () => {
 
   return (
     <div className="flex flex-col items-center bg-gradient-to-b from-black to-gray-900 min-h-screen p-6">
-
-      <p className="text-white text-4xl font-semibold mb-6">
-        🎉 Congratulations, You finished{" "}
-        <span className="text-yellow-400">{selfEntry.rank}</span>
-      </p>
-
       <h2 className="text-5xl font-bold text-white mb-8">🏆 Leaderboard</h2>
 
-      {/* <div className="w-full max-w-2xl flex flex-col gap-4">
+      {selfRank && (
+        <p className="text-white text-4xl font-semibold mb-6">
+          Your position is <span className="text-yellow-400">{selfRank}</span>
+        </p>
+      )}
+
+      <div className="w-full max-w-2xl flex flex-col gap-4">
         {leaderboard.slice(0, 5).map((team, index) => (
           <LeaderTeamItem
-            key={team.teamName}
+            key={team.teamName || index}
             imageURL={`rank${index + 1}.png`}
             rank={team.rank}
             teamName={team.teamName}
@@ -81,19 +86,20 @@ const Leaderboard = () => {
         ))}
       </div>
 
-      {showUserDetails && (
-        <div className="mt-8 w-full max-w-lg">
-          <h3 className="text-xl font-bold text-white mb-4 text-center">
-            Your Position
-          </h3>
-          <LeaderTeamItem
-            imageURL="self.png"
-            rank={selfEntry.rank}
-            teamName={selfEntry.teamName}
-            score={selfEntry.score ?? "0"}
-          />
-        </div>
-      )} */}
+      {selfRank &&
+        !leaderboard.slice(0, 5).some((team) => team._id === currentUserId) && (
+          <div className="mt-8 w-full max-w-lg">
+            <h3 className="text-xl font-bold text-white mb-4 text-center">
+              Your Position
+            </h3>
+            <LeaderTeamItem
+              imageURL="self.png"
+              rank={selfRank.rank}
+              teamName={selfRank.teamName}
+              score={selfRank.score ?? "0"}
+            />
+          </div>
+        )}
     </div>
   );
 };

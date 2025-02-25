@@ -1,85 +1,107 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { ToastContainer, toast } from "react-toastify";
 import Leaderboard from "./Leaderboard";
-import Countdown from "./Countdown";
 
-const Dashboard = ({ initialTime }) => {
-  const [time, setTime] = useState(initialTime);
+const Dashboard = ({ initialTime = 0 }) => {
   const [imageURL, setImageURL] = useState("");
   const [answer, setAnswer] = useState("");
-  const [count, setCount] = useState("");
+  const [questionNumber, setquestionNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [teamJoined, setTeamJoined] = useState(true);
   const [testCompleted, setTestCompleted] = useState(false);
   const [testStarted, setTestStarted] = useState(false);
+  const [time, setTime] = useState(initialTime);
+
+  // Function to fetch test data
+  const fetchTestData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/dashboard/contest/1",
+        { withCredentials: true }
+      );
+      setImageURL(response.data.question.queUrl);
+      setquestionNumber(response.data.question.queNo);
+
+      if (response.data.question.queUrl === "testcompleted") {
+        setTestCompleted(true);
+      }
+    } catch (error) {
+      console.error("Error fetching test data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Timer effect
+  useEffect(() => {
+    if (time > 0) {
+      const timer = setInterval(() => {
+        setTime((prevTime) => prevTime - 1);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    } else if (time <= 0 && !testStarted) {
+      setTestStarted(true);
+    }
+  }, [time, testStarted]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (localStorage.getItem("teamCode") ?? "" !== "") {
-        try {
-          const response = await axios.get(
-            "http://localhost:5000/api/dashboard/contest/1"
-          );
-          setImageURL(response.data.question.queUrl);
-          setCount(response.data.question.queNo);
-          if (response.data.question.queUrl === "testcompleted")
-            setTestCompleted(true);
-        } catch (error) {
-          setAnswer(error);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        setTeamJoined(false);
-      }
-    };
-    fetchData();
-    const timer = setInterval(
-      () => setTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0)),
-      1000
-    );
-    return () => clearInterval(timer);
-  }, [testStarted]);
+    if (testStarted && !testCompleted) {
+      fetchTestData();
+    }
+  }, [testStarted, testCompleted]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.put(
         "http://localhost:5000/api/dashboard/contest/1",
-        { answer }
+        { answer },
+        { withCredentials: true }
       );
-      response.data.message === "Answer is correct"
-        ? toast.success(response.data.message)
-        : toast.error(response.data.message);
-      if (response.data.question.queUrl === "testcompleted")
-        setTestCompleted(true);
+
+      if (response.data.status) {
+        toast(response.data.message);
+
+        if (
+          response.data.question &&
+          response.data.question.queUrl === "testcompleted"
+        ) {
+          setTestCompleted(true);
+        } else {
+          fetchTestData();
+          setAnswer("");
+        }
+      } else {
+        toast(response.data.message);
+      }
     } catch (error) {
       console.error("Error submitting answer:", error);
+      toast.error("Error submitting answer. Please try again.");
     }
   };
 
   if (testCompleted) return <Leaderboard />;
 
-  if (!teamJoined) {
+  // Show timer countdown before test starts
+  if (time > 0) {
     return (
-      <div className="flex justify-center items-center text-center p-8 text-white text-4xl w-full max-w-md flex flex-col rounded-lg bg-white/10 gap-12">
-        Join the team to start Web Set Hunt
+      <div className="flex items-center gap-2 bg-black/70 px-3 py-1 rounded-full">
+        <span className="animate-pulse text-green-500">●</span>
+        <span className="text-sm md:text-base">
+          {Math.floor(time / 3600)} hrs {Math.floor((time % 3600) / 60)} mins
+          remaining
+        </span>
       </div>
     );
   }
 
-  if (isLoading) return <div className="text-white text-2xl">Loading...</div>;
-  if (time > 0) {
-    return (
-      <Countdown
-        hours={Math.floor(time / 3600)}
-        minutes={Math.floor((time % 3600) / 60)}
-        seconds={time % 60}
-      />
-    );
+  // Show loading while fetching question
+  if (isLoading) {
+    return <div className="text-white text-2xl">Loading...</div>;
   }
 
+  // Show test content
   return (
     <div className="flex justify-center items-center h-screen p-8">
       <div className="flex bg-black/30 p-6 rounded-2xl shadow-lg w-full max-w-5xl gap-8">
@@ -96,7 +118,7 @@ const Dashboard = ({ initialTime }) => {
           <div className="text-yellow-400 text-2xl font-bold flex justify-between">
             <span>HUNT No:</span>
             <span className="bg-gray-700 px-4 py-2 rounded-full text-yellow-300 text-xl">
-              {count === 7 ? "?" : count}
+              {questionNumber}
             </span>
           </div>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -117,6 +139,7 @@ const Dashboard = ({ initialTime }) => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios  from "axios";
 import { Navbar } from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
 import Leaderboard from "../components/Leaderboard";
 
 const Lobby = () => {
+  const navigate = useNavigate();
   // Calculate time until 9 PM (21:00)
   const calculateTimeRemaining = () => {
     const time = new Date();
-    let hours = 21 - time.getHours();
+    let hours = 20 - time.getHours();
     let minutes;
     let seconds;
 
@@ -38,8 +41,8 @@ const Lobby = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Recalculate time every minute
@@ -53,18 +56,20 @@ const Lobby = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:5000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      window.location.href = "/login";
+      await axios.post(
+        "http://localhost:5000/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+
+      navigate("/landing");
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-// style={{ backgroundImage: "url('/background.png')" }}
+  // style={{ backgroundImage: "url('/background.png')" }}
   return (
-    <div className="min-h-screen flex flex-col bg-fixed bg-cover bg-black bg-center text-white "> 
+    <div className="min-h-screen flex flex-col bg-fixed bg-cover bg-black bg-center text-white ">
       {/* Overlay for better text readability */}
       <div className="fixed inset-0 opacity-10 bg-black/80 z-0 "></div>
 
@@ -75,8 +80,12 @@ const Lobby = () => {
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-[url('logo.svg')] bg-contain bg-no-repeat bg-center"></div>
             <div>
-              <h1 className="font-black text-2xl md:text-3xl tracking-wide">TechSpardha'25</h1>
-              <p className="font-light text-lg md:text-xl italic text-green-200">Frontier Reimagined</p>
+              <h1 className="font-black text-2xl md:text-3xl tracking-wide">
+                TechSpardha'25
+              </h1>
+              <p className="font-light text-lg md:text-xl italic text-green-200">
+                Frontier Reimagined
+              </p>
             </div>
           </div>
 
@@ -112,7 +121,8 @@ const Lobby = () => {
                 <div className="flex items-center gap-2 bg-black/70 px-3 py-1 rounded-full">
                   <span className="animate-pulse text-green-500">●</span>
                   <span className="text-sm md:text-base">
-                    {Math.floor(initialTime / 3600)} hrs {Math.floor((initialTime % 3600) / 60)} mins remaining
+                    {Math.floor(initialTime / 3600)} hrs{" "}
+                    {Math.floor((initialTime % 3600) / 60)} mins remaining
                   </span>
                 </div>
               )}
@@ -126,17 +136,23 @@ const Lobby = () => {
               {activeTab === "leaderboard" && <Leaderboard />}
               {activeTab === "team" && (
                 <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-4 text-green-400">Team Information</h3>
+                  <h3 className="text-xl font-semibold mb-4 text-green-400">
+                    Team Information
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-black/50 p-4 rounded-lg border border-green-600/20">
                       <h4 className="text-lg font-medium mb-2">Team Members</h4>
                       {/* Placeholder for team member list */}
-                      <p className="text-gray-300">Team members will be displayed here</p>
+                      <p className="text-gray-300">
+                        Team members will be displayed here
+                      </p>
                     </div>
                     <div className="bg-black/50 p-4 rounded-lg border border-green-600/20">
                       <h4 className="text-lg font-medium mb-2">Team Stats</h4>
                       {/* Placeholder for team stats */}
-                      <p className="text-gray-300">Team statistics will be displayed here</p>
+                      <p className="text-gray-300">
+                        Team statistics will be displayed here
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -149,7 +165,9 @@ const Lobby = () => {
       {/* Footer */}
       <footer className="relative z-10 py-3 bg-black/70 border-t border-green-600/30 text-center text-sm">
         <div className="max-w-7xl mx-auto">
-          <p>© 2025 TechSpardha - National Institute of Technology, Kurukshetra</p>
+          <p>
+            © 2025 TechSpardha - National Institute of Technology, Kurukshetra
+          </p>
         </div>
       </footer>
     </div>

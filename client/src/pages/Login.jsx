@@ -30,17 +30,20 @@ const Login = () => {
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
       if (!response.ok || data.status === false) {
+        console.log(data);
         throw new Error(data.message || "Logging in failed");
       }
-      console.log(data);
+      // console.log(data);
       toast("Logged in successfully!");
       navigate("/lobby");
+
     } catch (error) {
       toast(error.message);
     } finally {

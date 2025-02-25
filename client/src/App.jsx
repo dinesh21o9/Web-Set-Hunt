@@ -24,7 +24,7 @@ const isAuthenticated = async () => {
   try {
     const response = await fetch("http://localhost:5000/api/auth/check", {
       method: "GET",
-      credentials: 'include', 
+      credentials: "include", 
     });
     const data = await response.json();
     return data.isAuthenticated;
@@ -34,15 +34,22 @@ const isAuthenticated = async () => {
 };
 
 const ProtectedRoute = ({ element }) => {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState(null); 
 
   useEffect(() => {
-    isAuthenticated().then(setAuth(true));
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      setAuth(authenticated);
+    };
+
+    checkAuth();
   }, []);
 
-  if (auth === false) return <div>Loading...</div>;
+  if (auth === null) return <div>Loading...</div>; 
+
   return auth ? element : <Navigate to="/login" />;
 };
+
 
 const App = () => {
   return (

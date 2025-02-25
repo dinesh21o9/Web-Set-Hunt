@@ -6,8 +6,7 @@ const jwt = require("jsonwebtoken");
 //registeration
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password, username, rollNo, mobileNo } =
-      req.body;
+    const { email, password, username, rollNo, mobileNo } = req.body;
 
     const emailCheck = await User.findOne({ email });
     if (emailCheck) {
@@ -61,21 +60,52 @@ module.exports.login = async (req, res, next) => {
     }
 
     let uid = userData["_id"];
-    let token = jwt.sign({ payload: uid }, process.env.JWT_KEY, { expiresIn: "2h" });
+    let token = jwt.sign({ payload: uid }, process.env.JWT_KEY, {
+      expiresIn: "2h",
+    });
+
+    // console.log("NODE_ENV : " + process.env.NODE_ENV);
 
     // Set cookies securely
     res.cookie("login", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", 
-      path: '/',
-      maxAge: 2 * 3600000, // 2 hour expiration
+      httpOnly: true, // ✅ Prevents access via JavaScript (XSS protection).
+                      // ⬆️ Should ALWAYS be true for security.
+
+      secure: process.env.NODE_ENV === "production",
+                      // ✅ Ensures the cookie is sent only over HTTPS.
+                      // ⬆️ Should be false in development (localhost) and true in production.
+
+      sameSite: "lax", // ✅ Helps protect against CSRF attacks.
+                       // ⬆️ "Lax" is a good default for authentication cookies.
+                       // ⬆️ Use "Strict" for stronger security but may affect UX.
+                       // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
+
+      path: "/",  // ✅ Makes the cookie available across the entire domain.
+                  // ⬆️ Typically "/", unless restricting to specific paths.
+
+      maxAge: 2 * 3600000, // ✅ Specifies cookie expiration time (2 hours).
+                           // ⬆️ Adjust based on session requirements.
     });
 
+    // Set another secure cookie for user ID
     res.cookie("userid", uid, {
-      httpOnly: true,
+      httpOnly: true, // ✅ Prevents access via JavaScript (XSS protection).
+                      // ⬆️ Should ALWAYS be true for security.
+
       secure: process.env.NODE_ENV === "production",
-      path: '/',
-      maxAge: 2 * 3600000,
+                      // ✅ Ensures the cookie is sent only over HTTPS.
+                      // ⬆️ Should be false in development (localhost) and true in production.
+
+      sameSite: "lax", // ✅ Helps protect against CSRF attacks.
+                       // ⬆️ "Lax" is a good default for authentication cookies.
+                       // ⬆️ Use "Strict" for stronger security but may affect UX.
+                       // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
+
+      path: "/",  // ✅ Makes the cookie available across the entire domain.
+                  // ⬆️ Typically "/", unless restricting to specific paths.
+     
+      maxAge: 2 * 3600000, // ✅ Specifies cookie expiration time (2 hours).
+                           // ⬆️ Adjust based on session requirements.
     });
 
     const team = await Team.findOne({ members: userData._id });
@@ -89,7 +119,6 @@ module.exports.login = async (req, res, next) => {
       team: team || false,
       token,
     });
-
   } catch (error) {
     next(error);
   }
@@ -97,14 +126,13 @@ module.exports.login = async (req, res, next) => {
 
 module.exports.check = async (req, res, next) => {
   try {
-    const token = req.cookies.login; 
-    console.log("Token : ", token);
+    const token = req.cookies.login;
 
     if (!token) {
       return res.json({ isAuthenticated: false });
     }
 
-    jwt.verify(token, process.env.JWT_KEY); 
+    jwt.verify(token, process.env.JWT_KEY);
     return res.json({ isAuthenticated: true });
   } catch (error) {
     return res.json({ isAuthenticated: false, error: error.message });

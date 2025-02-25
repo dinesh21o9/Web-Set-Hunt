@@ -1,46 +1,46 @@
 .lobby {
-    background-image: url("../../public/assets/finll.jpg");
-    background-size: cover;
+  background-image: url("../../public/assets/finll.jpg");
+  background-size: cover;
 
-    .topbar {
-        display: flex;
-        align-items: center;
-        
-        .nit-logo-container {
-            background-image: url("../../public/assets/logo.svg");
-            background-size: contain;
-        }
+  .topbar {
+    display: flex;
+    align-items: center;
 
-        .tech-theme-container {
-            display: flex;
-            flex-direction: column;
-            color: white;
-            padding: 0px 20px;
-        }
-
-        .micro-logo-container {
-            background-image: url("../../public/assets/techspartha.png");
-            background-size: contain;
-        }
+    .nit-logo-container {
+      background-image: url("../../public/assets/logo.svg");
+      background-size: contain;
     }
 
-    .navbar {
-        box-shadow: 1px 4px 8px 4px rgba(239, 238, 238, 0.4);
+    .tech-theme-container {
+      display: flex;
+      flex-direction: column;
+      color: white;
+      padding: 0px 20px;
     }
 
-    .leader-card {
-        background-color: transparent;
-        color: white;
-        border: 1px solid white;
-        box-shadow: 1px 4px 8px 4px rgba(239, 238, 238, 0.4);
+    .micro-logo-container {
+      background-image: url("../../public/assets/techspartha.png");
+      background-size: contain;
     }
+  }
 
-    .leaderboard-card {
-        font-size: 1.5rem;
-        color: rgba(5,167,255,255);
-    }
+  .navbar {
+    box-shadow: 1px 4px 8px 4px rgba(239, 238, 238, 0.4);
+  }
 
-    .leaderboard-card:hover {
-        zoom: 1.1;
-    }
+  .leader-card {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    box-shadow: 1px 4px 8px 4px rgba(239, 238, 238, 0.4);
+  }
+
+  .leaderboard-card {
+    font-size: 1.5rem;
+    color: rgba(5, 167, 255, 255);
+  }
+
+  .leaderboard-card:hover {
+    zoom: 1.1;
+  }
 }

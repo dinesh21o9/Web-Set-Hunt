@@ -6,7 +6,8 @@ const jwt = require("jsonwebtoken");
 //registeration
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password, username, rollNo, mobileNo } = req.body;
+    const { teamLeaderName, teamName, email, password, rollNo, mobileNo } =
+      req.body;
 
     const emailCheck = await User.findOne({ email });
     if (emailCheck) {
@@ -16,15 +17,23 @@ module.exports.register = async (req, res, next) => {
       });
     }
 
-    const user = await User.create({
-      email,
-      password,
-      username,
-      rollNo,
-      mobileNo,
+    const teamCode = randomstring.generate({
+      length: 6,
+      charset: "alphanumeric",
+      capitalization: "uppercase",
     });
 
-    const random = await user.save();
+    const user = await User.create({
+      teamLeaderName,
+      teamName,
+      email,
+      password,
+      rollNo,
+      mobileNo,
+      teamCode,
+      score: 0,
+    });
+
     let uid = user["_id"];
     let token = jwt.sign({ payload: uid }, process.env.JWT_KEY);
     res.cookie("login", token);
@@ -68,44 +77,44 @@ module.exports.login = async (req, res, next) => {
 
     // Set cookies securely
     res.cookie("login", token, {
-      httpOnly: true, // ✅ Prevents access via JavaScript (XSS protection).
-                      // ⬆️ Should ALWAYS be true for security.
+      httpOnly: true, // Prevents access via JavaScript (XSS protection).
+      // ⬆️ Should ALWAYS be true for security.
 
       secure: process.env.NODE_ENV === "production",
-                      // ✅ Ensures the cookie is sent only over HTTPS.
-                      // ⬆️ Should be false in development (localhost) and true in production.
+      // Ensures the cookie is sent only over HTTPS.
+      // ⬆️ Should be false in development (localhost) and true in production.
 
-      sameSite: "lax", // ✅ Helps protect against CSRF attacks.
-                       // ⬆️ "Lax" is a good default for authentication cookies.
-                       // ⬆️ Use "Strict" for stronger security but may affect UX.
-                       // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
+      sameSite: "lax", // Helps protect against CSRF attacks.
+      // ⬆️ "Lax" is a good default for authentication cookies.
+      // ⬆️ Use "Strict" for stronger security but may affect UX.
+      // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
 
-      path: "/",  // ✅ Makes the cookie available across the entire domain.
-                  // ⬆️ Typically "/", unless restricting to specific paths.
+      path: "/", // Makes the cookie available across the entire domain.
+      // ⬆️ Typically "/", unless restricting to specific paths.
 
-      maxAge: 2 * 3600000, // ✅ Specifies cookie expiration time (2 hours).
-                           // ⬆️ Adjust based on session requirements.
+      maxAge: 2 * 3600000, // Specifies cookie expiration time (2 hours).
+      // ⬆️ Adjust based on session requirements.
     });
 
     // Set another secure cookie for user ID
     res.cookie("userid", uid, {
-      httpOnly: true, // ✅ Prevents access via JavaScript (XSS protection).
-                      // ⬆️ Should ALWAYS be true for security.
+      httpOnly: true, // Prevents access via JavaScript (XSS protection).
+      // ⬆️ Should ALWAYS be true for security.
 
       secure: process.env.NODE_ENV === "production",
-                      // ✅ Ensures the cookie is sent only over HTTPS.
-                      // ⬆️ Should be false in development (localhost) and true in production.
+      // Ensures the cookie is sent only over HTTPS.
+      // ⬆️ Should be false in development (localhost) and true in production.
 
-      sameSite: "lax", // ✅ Helps protect against CSRF attacks.
-                       // ⬆️ "Lax" is a good default for authentication cookies.
-                       // ⬆️ Use "Strict" for stronger security but may affect UX.
-                       // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
+      sameSite: "lax", // Helps protect against CSRF attacks.
+      // ⬆️ "Lax" is a good default for authentication cookies.
+      // ⬆️ Use "Strict" for stronger security but may affect UX.
+      // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).
 
-      path: "/",  // ✅ Makes the cookie available across the entire domain.
-                  // ⬆️ Typically "/", unless restricting to specific paths.
-     
-      maxAge: 2 * 3600000, // ✅ Specifies cookie expiration time (2 hours).
-                           // ⬆️ Adjust based on session requirements.
+      path: "/", // Makes the cookie available across the entire domain.
+      // ⬆️ Typically "/", unless restricting to specific paths.
+
+      maxAge: 2 * 3600000, // Specifies cookie expiration time (2 hours).
+      // ⬆️ Adjust based on session requirements.
     });
 
     const team = await Team.findOne({ members: userData._id });

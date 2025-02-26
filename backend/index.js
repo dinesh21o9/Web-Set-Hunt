@@ -6,8 +6,8 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 const corsOptions = {
-  origin: "http://localhost:5173", 
-  credentials: true, 
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
 };
 
 // Import routes
@@ -16,7 +16,6 @@ const quesRoutes = require("./routes/QuesRoutes");
 const quizRoutes = require("./routes/QuizRoutes");
 // const teamRoutes = require("./routes/TeamRoutes");
 const userRoutes = require("./routes/UserRoutes");
-
 
 const app = express();
 
@@ -42,7 +41,6 @@ app.use("/api/leaderboard", leaderRoutes);
 app.use("/api/dashboard", quizRoutes);
 app.use("/api/que", quesRoutes);
 app.use("/api/auth", userRoutes);
-
 
 // Start server
 app.listen(port, () => {

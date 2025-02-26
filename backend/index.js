@@ -6,9 +6,12 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 const corsOptions = {
-  origin: process.env.FRONTEND_URL,
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
+
 
 // Import routes
 const leaderRoutes = require("./routes/LeaderRoutes");

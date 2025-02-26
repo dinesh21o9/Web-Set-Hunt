@@ -41,7 +41,7 @@ const Login = () => {
         console.log(data);
         throw new Error(data.message || "Logging in failed");
       }
-      // console.log(data);
+
       toast("Logged in successfully!");
       navigate("/lobby");
     } catch (error) {

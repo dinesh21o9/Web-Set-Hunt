@@ -4,7 +4,7 @@ import axios from "axios";
 import { Navbar } from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
 import Leaderboard from "../components/Leaderboard";
-import Profile from "../components/Profile"; // Import the new Profile component
+import Profile from "../components/Profile";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Lobby = () => {
@@ -12,8 +12,13 @@ const Lobby = () => {
 
   const calculateTimeRemaining = () => {
     const time = new Date();
-    let hours = 14 - time.getHours();
-    let minutes = 45 - time.getMinutes();
+    let hours;
+    if (time.getHours() <= 0) {
+      hours = -1;
+    } else {
+      hours = 21 - time.getHours();
+    }
+    let minutes = 0 - time.getMinutes();
 
     if (minutes < 0) {
       hours = hours - 1;
@@ -70,15 +75,7 @@ const Lobby = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Left side - Logos and Title */}
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-[url('logo.svg')] bg-contain bg-no-repeat bg-center"></div>
-            <div>
-              <h1 className="font-black text-2xl md:text-3xl tracking-wide">
-                TechSpardha'25
-              </h1>
-              <p className="font-light text-lg md:text-xl italic text-green-200">
-                Frontier Reimagined
-              </p>
-            </div>
+            <img src="navbar/tslogo.jpg" className="w-72 h-18" />
           </div>
 
           {/* Right side - Navigation */}
@@ -89,9 +86,6 @@ const Lobby = () => {
               onLogout={handleLogout}
               isMobile={isMobile}
             />
-
-            {/* Tech Spardha Logo */}
-            <div className="hidden md:block w-16 h-16 bg-[url('/assets/techspartha.png')] bg-contain bg-no-repeat bg-center"></div>
           </div>
         </div>
       </header>
@@ -101,7 +95,7 @@ const Lobby = () => {
         <div className="max-w-7xl mx-auto">
           <div className="bg-black/60 backdrop-blur-sm rounded-sm shadow-2xl overflow-hidden border border-green-600/30">
             {/* Content Header */}
-            <div className="bg-green-600 py-4 px-6 flex justify-between items-center">
+            <div className="bg-green-700/75 py-4 px-6 flex justify-between items-center">
               <h2 className="text-xl md:text-2xl font-bold">
                 {activeTab === "dashboard" && "Event Dashboard"}
                 {activeTab === "leaderboard" && "Competition Leaderboard"}
@@ -125,10 +119,15 @@ const Lobby = () => {
 
       {/* Footer */}
       <footer className="relative z-10 py-3 bg-black/70 border-t border-green-600/30 text-center text-sm">
-        <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-center max-w-7xl mx-auto relative">
           <p>
-            © 2025 TechSpardha - National Institute of Technology, Kurukshetra
+            © 2025 TechSpardha - Microbus - National Institute of Technology,
+            Kurukshetra
           </p>
+          <img
+            src="hmd.png"
+            className="absolute items-center right-4 bottom-1 h-5 w-9 bg-white"
+          />
         </div>
       </footer>
     </div>

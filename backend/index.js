@@ -8,9 +8,9 @@ const port = process.env.PORT || 3000;
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  // methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
+  // allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 const leaderRoutes = require("./routes/LeaderRoutes");

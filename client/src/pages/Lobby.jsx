@@ -4,6 +4,7 @@ import axios from "axios";
 import { Navbar } from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
 import Leaderboard from "../components/Leaderboard";
+import Profile from "../components/Profile"; // Import the new Profile component
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Lobby = () => {
@@ -104,39 +105,19 @@ const Lobby = () => {
               <h2 className="text-xl md:text-2xl font-bold">
                 {activeTab === "dashboard" && "Event Dashboard"}
                 {activeTab === "leaderboard" && "Competition Leaderboard"}
-                {activeTab === "team" && "Team Management"}
+                {activeTab === "profile" && "User Profile"}{" "}
+                {/* Changed from team to profile */}
               </h2>
             </div>
 
             {/* Tab Content */}
-            <div className="p-4 md:p-6">
+            <div className="p-4 md:p-6 justify-center items-center">
               {activeTab === "dashboard" && (
                 <Dashboard initialTime={initialTime} />
               )}
               {activeTab === "leaderboard" && <Leaderboard />}
-              {activeTab === "team" && (
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-4 text-green-400">
-                    Team Information
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-black/50 p-4 rounded-lg border border-green-600/20">
-                      <h4 className="text-lg font-medium mb-2">Team Members</h4>
-                      {/* Placeholder for team member list */}
-                      <p className="text-gray-300">
-                        Team members will be displayed here
-                      </p>
-                    </div>
-                    <div className="bg-black/50 p-4 rounded-lg border border-green-600/20">
-                      <h4 className="text-lg font-medium mb-2">Team Stats</h4>
-                      {/* Placeholder for team stats */}
-                      <p className="text-gray-300">
-                        Team statistics will be displayed here
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {activeTab === "profile" && <Profile />}{" "}
+              {/* Display Profile component */}
             </div>
           </div>
         </div>

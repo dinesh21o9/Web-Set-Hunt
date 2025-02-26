@@ -205,4 +205,31 @@ module.exports.protectRoute = async (req, res, next) => {
   }
 };
 
+module.exports.profile = async (req, res, next) => {
+  try {
+    const token = req.cookies.wshToken;
+    if (!token) {
+      return res.status(401).json({
+        message: "Authentication required",
+        status: false,
+      });
+    }
+
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
+    const userId = decodedToken.payload;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        status: false,
+      });
+    }
+
+    return res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // module.exports.checkTeam = async (req, res, next) => {};

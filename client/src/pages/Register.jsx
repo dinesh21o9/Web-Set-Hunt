@@ -81,7 +81,25 @@ const Register = () => {
   };
 
   return (
-    <div className="font-mono min-h-screen w-full flex items-center justify-center bg-black px-4">
+    <div className="font-mono min-h-screen w-full flex items-center justify-center bg-black px-4 gap-6">
+      {/* Instructions Box */}
+      <div className="max-w-md w-full bg-black/90 p-6 rounded-xl shadow-lg space-y-4 border  border-green-600">
+        <h2 className="text-center text-3xl font-bold text-white">Instructions 📢</h2>
+        <ul className="text-green-300 space-y-3 text-sm">
+          <li>📝 Not registered in the Microbus Google Form? Oops, do that first! 🚀</li>
+          <li>🌍 External participants? Hold your horses! Register in the Google Form first! 🏇</li>
+          <li>👬 Each team has exactly 2 members. Only the leader should register! If both register, well... disqualified! 💀</li>
+          <li>🎥 The other member can join a Google Meet with the leader or participate together in the event! 🤝</li>
+          <li>🧩 The questions are rebus puzzles! Search the internet, find clues, and solve them! 🕵️‍♂️</li>
+          <li>🔡 Answers are NOT case-sensitive, so don't stress about capitalization! 🔤</li>
+          <li>📊 Keep an eye on the leaderboard! Check your position and plan your strategy! 📈</li>
+          <li>⏳ Speed matters! If scores are tied, the faster team wins! Tick-tock! ⏰</li>
+          <li>🤐 Don’t share your solutions! You want to win, right? 😉</li>
+          <li>📌 Only those who registered in the Google Form will be evaluated. Others? Sorry, buddy. 🤷‍♂️</li>
+          <li>🤖 No ChatGPT allowed! We tried it, and well... let’s just say it failed spectacularly. 😂</li>
+        </ul>
+      </div>
+
       <div className="max-w-md w-full bg-black/90 p-6 rounded-xl shadow-lg space-y-6 border border-green-600">
         <h2 className="text-center text-3xl font-bold text-white">
           Create Your Account

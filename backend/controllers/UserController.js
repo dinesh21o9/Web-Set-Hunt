@@ -103,7 +103,7 @@ module.exports.login = async (req, res, next) => {
       // Ensures the cookie is sent only over HTTPS.
       // ⬆️ Should be false in development (localhost) and true in production.
 
-      sameSite: "lax", // Helps protect against CSRF attacks.
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Helps protect against CSRF attacks.
       // ⬆️ "Lax" is a good default for authentication cookies.
       // ⬆️ Use "Strict" for stronger security but may affect UX.
       // ⬆️ Use "None" only if you need cross-site access (requires `secure: true`).

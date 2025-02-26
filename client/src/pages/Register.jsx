@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Register = () => {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const Register = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -87,7 +88,9 @@ const Register = () => {
         </h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-white">Team Name</label>
+            <label className="block text-sm font-medium text-white">
+              Team Name
+            </label>
             <input
               id="teamName"
               name="teamName"
@@ -100,7 +103,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-white">Team Leader Name</label>
+            <label className="block text-sm font-medium text-white">
+              Team Leader Name
+            </label>
             <input
               id="teamLeaderName"
               name="teamLeaderName"
@@ -113,7 +118,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-white">Email Address</label>
+            <label className="block text-sm font-medium text-white">
+              Email Address
+            </label>
             <input
               id="email"
               name="email"
@@ -127,7 +134,9 @@ const Register = () => {
           </div>
           <div className="flex space-x-4">
             <div className="w-1/2">
-              <label className="block text-sm font-medium text-white">Roll Number</label>
+              <label className="block text-sm font-medium text-white">
+                Roll Number
+              </label>
               <input
                 id="rollNo"
                 name="rollNo"
@@ -140,7 +149,9 @@ const Register = () => {
               />
             </div>
             <div className="w-1/2">
-              <label className="block text-sm font-medium text-white">Mobile Number</label>
+              <label className="block text-sm font-medium text-white">
+                Mobile Number
+              </label>
               <input
                 id="mobileNo"
                 name="mobileNo"
@@ -154,9 +165,10 @@ const Register = () => {
             </div>
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium text-white">Password</label>
+            <label className="block text-sm font-medium text-white">
+              Password
+            </label>
             <input
               id="password"
               name="password"
@@ -169,7 +181,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-white">Confirm Password</label>
+            <label className="block text-sm font-medium text-white">
+              Confirm Password
+            </label>
             <input
               id="confirmPassword"
               name="confirmPassword"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { LeaderTeamItem } from "./LeaderTeamItem";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
@@ -13,14 +14,14 @@ const Leaderboard = () => {
     const fetchData = async () => {
       try {
         const userResponse = await axios.get(
-          "http://localhost:5000/api/leaderboard/current",
+          `${API_BASE_URL}/api/leaderboard/current`,
           { withCredentials: true }
         );
         const userId = userResponse.data;
         setCurrentUserId(userId);
 
         const { data } = await axios.get(
-          "http://localhost:5000/api/leaderboard/winners",
+          `${API_BASE_URL}/api/leaderboard/winners`,
           { withCredentials: true }
         );
 

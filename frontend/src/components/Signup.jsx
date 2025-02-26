@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-hot-toast";
 import "../styles/Signup.css";
 import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const Signup = () => {
   const navigate = useNavigate();
@@ -26,14 +27,11 @@ export const Signup = () => {
     // Handle form submission logic here
 
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        {
-          email: email,
-          password: password,
-          confirmPassword: repassword,
-        }
-      );
+      const { data } = await axios.post(`${API_BASE_URL}/api/auth/register`, {
+        email: email,
+        password: password,
+        confirmPassword: repassword,
+      });
       localStorage.clear();
       sessionStorage.clear();
       localStorage.setItem("email", data.user.email);

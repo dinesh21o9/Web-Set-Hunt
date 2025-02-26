@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import Leaderboard from "./Leaderboard";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Dashboard = ({ initialTime = 0 }) => {
   const [imageURL, setImageURL] = useState("");
@@ -11,12 +12,30 @@ const Dashboard = ({ initialTime = 0 }) => {
   const [testCompleted, setTestCompleted] = useState(false);
   const [testStarted, setTestStarted] = useState(false);
   const [time, setTime] = useState(initialTime);
+  const [endTimeReached, setEndTimeReached] = useState(false);
+
+  // Function to calculate time remaining until 2:00 AM
+  const calculateTimeUntilEnd = () => {
+    const now = new Date();
+    const endTime = new Date();
+
+    // Set end time to specified hour and minute
+    endTime.setHours(2, 0, 0, 0);
+
+    // If current time is already past the end time, set end time to next day
+    if (now > endTime) {
+      endTime.setDate(endTime.getDate() + 1);
+    }
+
+    // Calculate time difference in seconds
+    return Math.floor((endTime - now) / 1000);
+  };
 
   // Function to fetch test data
   const fetchTestData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/dashboard/contest/1",
+        `${API_BASE_URL}/api/dashboard/contest/1`,
         { withCredentials: true }
       );
       setImageURL(response.data.question.queUrl);
@@ -32,7 +51,7 @@ const Dashboard = ({ initialTime = 0 }) => {
     }
   };
 
-  // Timer effect
+  // Timer effect for starting test
   useEffect(() => {
     if (time > 0) {
       const timer = setInterval(() => {
@@ -45,6 +64,27 @@ const Dashboard = ({ initialTime = 0 }) => {
     }
   }, [time, testStarted]);
 
+  // Effect for monitoring test end time
+  useEffect(() => {
+    if (testStarted && !testCompleted && !endTimeReached) {
+      const checkEndTime = setInterval(() => {
+        const timeRemaining = calculateTimeUntilEnd();
+
+        // Show remaining time in console (optional)
+        console.log(`Time remaining until test ends: ${timeRemaining} seconds`);
+
+        // End test when time reaches 0
+        if (timeRemaining <= 0) {
+          setEndTimeReached(true);
+          setTestCompleted(true);
+          clearInterval(checkEndTime);
+        }
+      }, 1000);
+
+      return () => clearInterval(checkEndTime);
+    }
+  }, [testStarted, testCompleted, endTimeReached]);
+
   useEffect(() => {
     if (testStarted && !testCompleted) {
       fetchTestData();
@@ -55,7 +95,7 @@ const Dashboard = ({ initialTime = 0 }) => {
     event.preventDefault();
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/dashboard/contest/1",
+        `${API_BASE_URL}/api/dashboard/contest/1`,
         { answer },
         { withCredentials: true }
       );
@@ -81,12 +121,43 @@ const Dashboard = ({ initialTime = 0 }) => {
     }
   };
 
+  // Add a component to display remaining time until test ends
+  const RemainingTime = () => {
+    const [endRemaining, setEndRemaining] = useState(calculateTimeUntilEnd());
+
+    useEffect(() => {
+      const timer = setInterval(() => {
+        const remaining = calculateTimeUntilEnd();
+        setEndRemaining(remaining);
+
+        if (remaining <= 0) {
+          clearInterval(timer);
+        }
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }, []);
+
+    const hours = Math.floor(endRemaining / 3600);
+    const minutes = Math.floor((endRemaining % 3600) / 60);
+    const seconds = endRemaining % 60;
+
+    return (
+      <div className="flex items-center gap-2 bg-gray-800 px-3 py-1 rounded-full justify-center">
+        <span className="animate-pulse text-green-500">●</span>
+        <span className="text-sm md:text-base">
+          Test ends in: {hours}h {minutes}m {seconds}s
+        </span>
+      </div>
+    );
+  };
+
   if (testCompleted) return <Leaderboard />;
 
   // Show timer countdown before test starts
   if (time > 0) {
     return (
-      <div className="flex items-center gap-2 bg-black/70 px-3 py-1 rounded-full">
+      <div className="flex items-center gap-2 bg-gray-800 px-3 py-1 rounded-full justify-center">
         <span className="animate-pulse text-green-500">●</span>
         <span className="text-sm md:text-base">
           {Math.floor(time / 3600)} hrs {Math.floor((time % 3600) / 60)} mins
@@ -98,12 +169,13 @@ const Dashboard = ({ initialTime = 0 }) => {
 
   // Show loading while fetching question
   if (isLoading) {
-    return <div className="text-white text-2xl">Loading...</div>;
+    return <div className="text-white text-2xl text-center">Loading...</div>;
   }
 
   // Show test content
   return (
-    <div className="flex justify-center items-center h-screen p-8">
+    <div className="flex flex-col justify-center items-center h-screen p-8 gap-4">
+      <RemainingTime />
       <div className="flex bg-black/30 p-6 rounded-2xl shadow-lg w-full max-w-5xl gap-8">
         <div className="flex-2">
           {imageURL && (

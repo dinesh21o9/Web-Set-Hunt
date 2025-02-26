@@ -1,34 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios  from "axios";
+import axios from "axios";
 import { Navbar } from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
 import Leaderboard from "../components/Leaderboard";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Lobby = () => {
   const navigate = useNavigate();
-  // Calculate time until 9 PM (21:00)
+
   const calculateTimeRemaining = () => {
     const time = new Date();
-    let hours = 20 - time.getHours();
-    let minutes;
-    let seconds;
+    let hours = 14 - time.getHours();
+    let minutes = 45 - time.getMinutes();
 
-    if (time.getMinutes() > 50) {
+    if (minutes < 0) {
       hours = hours - 1;
-      minutes = 110 - time.getMinutes();
-    } else {
-      minutes = 50 - time.getMinutes();
+      minutes = 60 + minutes;
     }
 
-    if (time.getSeconds() > 0) {
-      minutes = minutes - 1;
-      seconds = 60 - time.getSeconds();
-    } else {
-      seconds = 0;
-    }
-
-    return (hours * 60 + minutes) * 60 + seconds + 10;
+    return (hours * 60 + minutes) * 60 - time.getSeconds();
   };
 
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -57,7 +48,7 @@ const Lobby = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/logout",
+        `${API_BASE_URL}/api/auth/logout`,
         {},
         { withCredentials: true }
       );
@@ -115,17 +106,6 @@ const Lobby = () => {
                 {activeTab === "leaderboard" && "Competition Leaderboard"}
                 {activeTab === "team" && "Team Management"}
               </h2>
-
-              {/* Time remaining indicator */}
-              {activeTab === "dashboard" && (
-                <div className="flex items-center gap-2 bg-black/70 px-3 py-1 rounded-full">
-                  <span className="animate-pulse text-green-500">●</span>
-                  <span className="text-sm md:text-base">
-                    {Math.floor(initialTime / 3600)} hrs{" "}
-                    {Math.floor((initialTime % 3600) / 60)} mins remaining
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Tab Content */}

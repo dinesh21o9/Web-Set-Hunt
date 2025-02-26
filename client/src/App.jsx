@@ -1,16 +1,16 @@
-import {React, useState, useEffect} from "react";
+import { React, useState, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Lobby from "./pages/Lobby";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const isAuthenticated = async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/auth/check", {
+    const response = await fetch(`${API_BASE_URL}/api/auth/check`, {
       method: "GET",
-      credentials: "include", 
+      credentials: "include",
     });
     const data = await response.json();
     return data.isAuthenticated;
@@ -20,7 +20,7 @@ const isAuthenticated = async () => {
 };
 
 const ProtectedRoute = ({ element }) => {
-  const [auth, setAuth] = useState(null); 
+  const [auth, setAuth] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -31,11 +31,10 @@ const ProtectedRoute = ({ element }) => {
     checkAuth();
   }, []);
 
-  if (auth === null) return <div>Loading...</div>; 
+  if (auth === null) return <div>Loading...</div>;
 
   return auth ? element : <Navigate to="/login" />;
 };
-
 
 const App = () => {
   return (

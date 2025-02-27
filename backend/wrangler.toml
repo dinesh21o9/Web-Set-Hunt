@@ -1,5 +1,5 @@
-name = "your-api-name"
-main = "src/index.js"
+name = "wsh2025api"
+main = "index.js"
 compatibility_date = "2023-12-01"
 
 # Worker configuration

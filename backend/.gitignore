@@ -4,4 +4,4 @@
 # Environment variables file
 .env
 
-.build
+/build

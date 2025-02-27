@@ -1,4 +1,4 @@
-name = "wsh2025api"
+name = "wshapi2025"
 main = "index.js"
 compatibility_date = "2023-12-01"
 

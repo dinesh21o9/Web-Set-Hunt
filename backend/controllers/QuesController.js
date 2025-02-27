@@ -1,5 +1,5 @@
 const Question = require("../model/QuestionModel");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 module.exports.setQuestion = async (req, res, next) => {
   try {
     console.log(req.body);

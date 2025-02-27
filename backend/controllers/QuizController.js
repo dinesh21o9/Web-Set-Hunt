@@ -1,7 +1,7 @@
 // const Quiz = require("../model/QuizModel");
 const Question = require("../model/QuestionModel");
 const User = require("../model/UserModel");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 // const Team = require("../model/TeamModel");
 

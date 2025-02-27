@@ -13,7 +13,7 @@ const Lobby = () => {
   const calculateTimeRemaining = () => {
     const time = new Date();
     let hours;
-    if (time.getHours() <= 0) {
+    if (time.getHours() <= 2) {
       hours = -1;
     } else {
       hours = 21 - time.getHours();

@@ -1,0 +1,9 @@
+name = "backend"
+type = "webpack"
+main="index.js"
+route = ''
+zone_id = ''
+usage_model = ''
+compatibility_flags = []
+workers_dev = true
+compatibility_date = "2025-02-27"

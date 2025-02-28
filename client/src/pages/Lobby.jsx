@@ -5,6 +5,7 @@ import { Navbar } from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
 import Leaderboard from "../components/Leaderboard";
 import Profile from "../components/Profile";
+import { ToastContainer, toast } from "react-toastify";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Lobby = () => {
@@ -31,6 +32,16 @@ const Lobby = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [initialTime, setInitialTime] = useState(calculateTimeRemaining());
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [clickCount, setClickCount] = useState(0);
+  
+  const handleSecretClick = () => {
+    setClickCount((prev) => prev + 1);
+    console.log(clickCount);
+    if (clickCount + 1 === 7) {
+      toast("aHR0cHM6Ly9kcml2ZS5nb29nbGUuY29tL2RyaXZlL2ZvbGRlcnMvMVJKbHVFTmxqMFpNUDRCa1l6Rm5fRTE2NmhfeDE1andTP3VzcD1zaGFyaW5n");
+      setClickCount(0);
+    }
+  };
 
   // Handle responsive layout
   useEffect(() => {
@@ -117,6 +128,7 @@ const Lobby = () => {
         </div>
       </main>
 
+      <ToastContainer />
       {/* Footer */}
       <footer className="relative z-10 py-3 bg-black/70 border-t border-green-600/30 text-center text-sm">
         <div className="flex items-center justify-center max-w-7xl mx-auto relative">
@@ -126,7 +138,8 @@ const Lobby = () => {
           </p>
           <img
             src="hmd.png"
-            className="absolute items-center right-4 bottom-1 h-5 w-9 bg-white"
+            className="absolute items-center right-4 bottom-1 h-5 w-9 bg-white hover:text-white"
+            onClick={handleSecretClick}
           />
         </div>
       </footer>

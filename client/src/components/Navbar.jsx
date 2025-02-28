@@ -6,12 +6,13 @@ export const Navbar = ({ setActiveTab, activeTab, onLogout }) => {
     { name: "Dashboard", key: "dashboard", icon: "dashboard.svg" },
     { name: "Leaderboard", key: "leaderboard", icon: "leaderboard.svg" },
     { name: "Profile", key: "profile", icon: "profile.svg" },
+    { name: "sponsors", key: "sponsors", icon: "sponsors.png" },
   ];
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3" >
       {/* Navigation Items */}
-      <div className="flex items-center bg-white backdrop-blur-sm rounded-full px-2 py-1 shadow-lg gap-2">
+      <div className="flex items-center bg-white backdrop-blur-sm rounded-full px-2 py-1 shadow-lg gap-2" >
         {navItems.map(({ name, key, icon }) => (
           <button
             key={key}

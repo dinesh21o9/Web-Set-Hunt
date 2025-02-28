@@ -52,7 +52,7 @@ module.exports.register = async (req, res, next) => {
       path: "/", // Makes the cookie available across the entire domain.
       // ⬆️ Typically "/", unless restricting to specific paths.
 
-      maxAge: 2 * 3600000, // Specifies cookie expiration time (2 hours).
+      maxAge: 10 * 3600000, // Specifies cookie expiration time (10 hours).
       // ⬆️ Adjust based on session requirements.
     });
 
@@ -89,7 +89,7 @@ module.exports.login = async (req, res, next) => {
 
     let uid = userData["_id"];
     let token = jwt.sign({ payload: uid }, process.env.JWT_KEY, {
-      expiresIn: "2h",
+      expiresIn: "10h",
     });
 
     // console.log("NODE_ENV : " + process.env.NODE_ENV);
@@ -111,7 +111,7 @@ module.exports.login = async (req, res, next) => {
       path: "/", // Makes the cookie available across the entire domain.
       // ⬆️ Typically "/", unless restricting to specific paths.
 
-      maxAge: 2 * 3600000, // Specifies cookie expiration time (2 hours).
+      maxAge: 10 * 3600000, // Specifies cookie expiration time (2 hours).
       // ⬆️ Adjust based on session requirements.
     });
 

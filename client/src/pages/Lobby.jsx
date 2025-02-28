@@ -5,6 +5,7 @@ import { Navbar } from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
 import Leaderboard from "../components/Leaderboard";
 import Profile from "../components/Profile";
+import Sponsors from "../components/Sponsors";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Lobby = () => {
@@ -75,7 +76,10 @@ const Lobby = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Left side - Logos and Title */}
           <div className="flex items-center gap-4">
-            <img src="navbar/tslogo.jpg" className="w-72 h-18" />
+            <img src="navbar/tslogo.png" className="w-72 h-18" />
+            <span> </span>
+            <img src="cross.png" className="w-10 h-10" />
+            <img src="sponsors/languifyy.png" className="w-50 h-10" />
           </div>
 
           {/* Right side - Navigation */}
@@ -100,6 +104,7 @@ const Lobby = () => {
                 {activeTab === "dashboard" && "Event Dashboard"}
                 {activeTab === "leaderboard" && "Competition Leaderboard"}
                 {activeTab === "profile" && "User Profile"}{" "}
+                {activeTab === "sponsors" && "Sponsors"}{" "}
                 {/* Changed from team to profile */}
               </h2>
             </div>
@@ -111,7 +116,7 @@ const Lobby = () => {
               )}
               {activeTab === "leaderboard" && <Leaderboard />}
               {activeTab === "profile" && <Profile />}{" "}
-              {/* Display Profile component */}
+              {activeTab === "sponsors" && <Sponsors />}
             </div>
           </div>
         </div>

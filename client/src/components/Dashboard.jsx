@@ -18,7 +18,7 @@ const Dashboard = ({ initialTime = 0 }) => {
     const now = new Date();
     const endTime = new Date();
 
-    endTime.setHours(2, 0, 0, 0);
+    endTime.setHours(3, 0, 0, 0);
 
     if (now > endTime) {
       endTime.setDate(endTime.getDate() + 1);
@@ -235,7 +235,9 @@ const Dashboard = ({ initialTime = 0 }) => {
       <div className="flex justify-center items-center min-h-screen bg-black bg-[radial-gradient(circle_at_center,rgba(0,128,0,0.1),transparent_70%)]">
         <div className="flex flex-col items-center gap-4">
           <div className="animate-spin h-14 w-14 border-4 border-green-500 border-t-transparent rounded-full shadow-lg shadow-green-500/30"></div>
-          <p className="text-green-400 font-mono mt-4">FETCHING DASHBOARD ...</p>
+          <p className="text-green-400 font-mono mt-4">
+            FETCHING DASHBOARD ...
+          </p>
         </div>
       </div>
     );
@@ -308,7 +310,7 @@ const Dashboard = ({ initialTime = 0 }) => {
                     alt="Encrypted Data"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-green-900/50 py-1 px-3 font-mono text-xs text-green-300 flex justify-between">
-                    <span>WSH 2025</span>
+                    <span>WSH 2025 | TV</span>
                   </div>
                 </div>
               )}

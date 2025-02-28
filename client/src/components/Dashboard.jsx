@@ -13,6 +13,7 @@ const Dashboard = ({ initialTime = 0 }) => {
   const [time, setTime] = useState(initialTime);
   const [endTimeReached, setEndTimeReached] = useState(false);
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [isSubmitting, setIsSubmitting] = useState(false);  
 
   const calculateTimeUntilEnd = () => {
     const now = new Date();
@@ -91,6 +92,8 @@ const Dashboard = ({ initialTime = 0 }) => {
       return;
     }
 
+    setIsSubmitting(true); 
+
     try {
       // setIsLoading(true);
       const response = await axios.put(
@@ -118,6 +121,7 @@ const Dashboard = ({ initialTime = 0 }) => {
       console.error("Error submitting answer:", error);
       toast("Connection failure during decryption attempt.");
     } finally {
+      setIsSubmitting(false);
       setIsLoading(false);
     }
   };
@@ -337,9 +341,9 @@ const Dashboard = ({ initialTime = 0 }) => {
                   <button
                     type="submit"
                     className="w-full py-3 bg-green-800 hover:bg-green-700 text-white font-mono font-bold rounded-lg transition-colors border border-green-500/50 shadow-lg flex items-center justify-center gap-2"
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                   >
-                    {isLoading ? (
+                    {isSubmitting ? (
                       <>
                         <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
                         <span>PROCESSING...</span>
@@ -356,13 +360,14 @@ const Dashboard = ({ initialTime = 0 }) => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                           />
                         </svg>
                         <span>SUBMIT</span>
                       </>
                     )}
                   </button>
+
                 </form>
               </div>
             </div>

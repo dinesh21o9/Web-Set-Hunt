@@ -18,7 +18,7 @@ const Landing = () => {
         muted
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="banner.mp4" type="video/mp4" />
+        <source src="landing.mp4" type="video/mp4" />
       </video>
 
       {/* Navbar */}

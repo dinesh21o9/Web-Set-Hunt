@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
 body {
-    @apply font-mono;
-    /* background-image: '; */
-  }
+  @apply font-mono;
+}

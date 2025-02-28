@@ -14,7 +14,7 @@ const corsOptions = {
 };
 
 const leaderRoutes = require("./routes/LeaderRoutes");
-const quesRoutes = require("./routes/QuesRoutes");
+// const quesRoutes = require("./routes/QuesRoutes");
 const quizRoutes = require("./routes/QuizRoutes");
 const userRoutes = require("./routes/UserRoutes");
 const connectToMongo = require("./connectDB");
@@ -40,11 +40,11 @@ app.use(cookieParser());
 // Routes
 app.use("/api/leaderboard", leaderRoutes);
 app.use("/api/dashboard", quizRoutes);
-app.use("/api/que", quesRoutes);
+// app.use("/api/que", quesRoutes);
 app.use("/api/auth", userRoutes);
 
-// app.listen(port, () => {
-//   console.log(`App is running on the port ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`App is running on the port ${port}`);
+});
 
 module.exports = app;

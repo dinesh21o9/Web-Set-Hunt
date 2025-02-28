@@ -32,14 +32,14 @@ const Lobby = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [initialTime, setInitialTime] = useState(calculateTimeRemaining());
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [clickCount, setClickCount] = useState(0);
+  const [clickCount, setClickCount] = useState(1);
   
   const handleSecretClick = () => {
     setClickCount((prev) => prev + 1);
     console.log(clickCount);
-    if (clickCount + 1 === 7) {
+    if (clickCount === 7) {
       toast("aHR0cHM6Ly9kcml2ZS5nb29nbGUuY29tL2RyaXZlL2ZvbGRlcnMvMVJKbHVFTmxqMFpNUDRCa1l6Rm5fRTE2NmhfeDE1andTP3VzcD1zaGFyaW5n");
-      setClickCount(0);
+      setClickCount(1);
     }
   };
 
@@ -138,7 +138,7 @@ const Lobby = () => {
           </p>
           <img
             src="hmd.png"
-            className="absolute items-center right-4 bottom-1 h-5 w-9 bg-white hover:text-white"
+            className="absolute items-center right-4 bottom-1 h-5 w-9 bg-white hover:text-white cursor-pointer"
             onClick={handleSecretClick}
           />
         </div>

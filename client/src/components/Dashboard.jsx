@@ -339,6 +339,7 @@ const Dashboard = ({ initialTime = 0 }) => {
                     className="w-full py-3 bg-green-800 hover:bg-green-700 text-white font-mono font-bold rounded-lg transition-colors border border-green-500/50 shadow-lg flex items-center justify-center gap-2"
                     disabled={isLoading}
                   >
+                    
                     {isLoading ? (
                       <>
                         <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
@@ -359,7 +360,8 @@ const Dashboard = ({ initialTime = 0 }) => {
                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                           />
                         </svg>
-                        <span>SUBMIT</span>
+                        <span>{isSubmitting ? 'Processing...' : 'Submit'}</span>
+                        
                       </>
                     )}
                   </button>

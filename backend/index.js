@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+const clientIdentifier = require("./middlewares/clientIdentifier");
 const port = process.env.PORT || 3000;
 
 const corsOptions = {
@@ -36,15 +37,16 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(clientIdentifier);
+// app.use("/api/auth/login", clientLimiter);
 // Routes
 app.use("/api/leaderboard", leaderRoutes);
 app.use("/api/dashboard", quizRoutes);
 // app.use("/api/que", quesRoutes);
 app.use("/api/auth", userRoutes);
 
-app.listen(port, () => {
-  console.log(`App is running on the port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`App is running on the port ${port}`);
+// });
 
 module.exports = app;

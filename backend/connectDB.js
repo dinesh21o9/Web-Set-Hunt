@@ -14,7 +14,6 @@ const connectToMongo = async (req, res, next) => {
       console.log("Connected to MongoDB ");
     } else console.log("Re-using existing DB connection");
 
-    console.log("Connected to MongoDB ");
     return next();
   } catch (error) {
     console.error(error.message);

@@ -81,7 +81,11 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-[url('background.png')] bg-cover bg-center ">
+    <div className="bg-cover bg-center" style={{
+      backgroundImage: `url('background.png')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
+    }}>
       <div className="absolute inset-0 bg-black opacity-80"></div>
       <div className="relative font-mono min-h-screen w-full flex items-center justify-center  px-4 gap-6">
         {/* Instructions Box */}

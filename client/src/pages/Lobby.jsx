@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Navbar } from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
+import DemoDashboard from "../components/DemoDashboard"; 
 import Leaderboard from "../components/Leaderboard";
 import Profile from "../components/Profile";
 import { ToastContainer, toast } from "react-toastify";
@@ -34,7 +35,8 @@ const Lobby = () => {
   const [initialTime, setInitialTime] = useState(calculateTimeRemaining());
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [clickCount, setClickCount] = useState(1);
-  
+  const [isDemoActive, setIsDemoActive] = useState(false);
+
   const handleSecretClick = () => {
     setClickCount((prev) => prev + 1);
     console.log(clickCount);
@@ -44,7 +46,10 @@ const Lobby = () => {
     }
   };
 
-  // Handle responsive layout
+  const toggleDemo = () => {
+    setIsDemoActive(!isDemoActive);
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -54,7 +59,6 @@ const Lobby = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Recalculate time every minute
   useEffect(() => {
     const timer = setInterval(() => {
       setInitialTime(calculateTimeRemaining());
@@ -70,30 +74,24 @@ const Lobby = () => {
         {},
         { withCredentials: true }
       );
-
       navigate("/landing");
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-  // style={{ backgroundImage: "url('/background.png')" }}
+
   return (
     <div className="min-h-screen flex flex-col bg-fixed bg-cover bg-black bg-center text-white ">
-      {/* Overlay for better text readability */}
       <div className="fixed inset-0 opacity-10 bg-black/80 z-0 "></div>
 
-      {/* Header Section */}
       <header className="relative z-10 py-4 px-6 bg-black/90 shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Left side - Logos and Title */}
           <div className="flex items-center gap-4">
             <img src="navbar/tslogo.png" className="w-72 h-18" />
             <span> </span>
             <img src="cross.png" className="w-10 h-10" />
             <img src="sponsors/languifyy.png" className="w-50 h-10" />
           </div>
-
-          {/* Right side - Navigation */}
           <div className="flex items-center gap-4">
             <Navbar
               setActiveTab={setActiveTab}
@@ -105,28 +103,30 @@ const Lobby = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="relative z-10 flex-1 p-4 md:p-8">
         <div className="max-w-7xl mx-auto">
           <div className="bg-black/60 backdrop-blur-sm rounded-sm shadow-2xl overflow-hidden border border-green-600/30">
-            {/* Content Header */}
             <div className="bg-green-700/75 py-4 px-6 flex justify-between items-center">
               <h2 className="text-xl md:text-2xl font-bold">
                 {activeTab === "dashboard" && "Event Dashboard"}
                 {activeTab === "leaderboard" && "Competition Leaderboard"}
-                {activeTab === "profile" && "User Profile"}{" "}
-                {activeTab === "sponsors" && "Sponsors"}{" "}
-                {/* Changed from team to profile */}
+                {activeTab === "profile" && "User Profile"} 
+                {activeTab === "sponsors" && "Sponsors"}
               </h2>
+              <button
+                className={`px-4 py-2 rounded-xl text-white border border-green-600/30 
+                  ${isDemoActive ? 'bg-red-600 text-black' : 'bg-green-700'} hover:bg-opacity-80`}                             
+                onClick={toggleDemo}
+              >
+                {isDemoActive ? "Disable Demo" : "Enable Demo"}
+              </button>
             </div>
-
-            {/* Tab Content */}
             <div className="p-4 md:p-6 justify-center items-center">
               {activeTab === "dashboard" && (
-                <Dashboard initialTime={initialTime} />
+                isDemoActive ? <DemoDashboard onDemoComplete={() => setIsDemoActive(false)}/> : <Dashboard initialTime={initialTime} />
               )}
               {activeTab === "leaderboard" && <Leaderboard />}
-              {activeTab === "profile" && <Profile />}{" "}
+              {activeTab === "profile" && <Profile />} 
               {activeTab === "sponsors" && <Sponsors />}
             </div>
           </div>
@@ -134,7 +134,6 @@ const Lobby = () => {
       </main>
 
       <ToastContainer />
-      {/* Footer */}
       <footer className="relative z-10 py-3 bg-black/70 border-t border-green-600/30 text-center text-sm">
         <div className="flex items-center justify-center max-w-7xl mx-auto relative">
           <p>

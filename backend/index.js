@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 require("dotenv").config();
@@ -22,15 +21,6 @@ const connectToMongo = require("./connectDB");
 
 const app = express();
 
-// mongoose
-//   .connect(process.env.MONGO_URL)
-//   .then(() => {
-//     console.log("Database connected successfully");
-//   })
-//   .catch((error) => {
-//     console.log(error.message);
-//   });
-
 // Middleware
 app.use(connectToMongo);
 app.use(cors(corsOptions));
@@ -38,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(clientIdentifier);
-// app.use("/api/auth/login", clientLimiter);
+
 // Routes
 app.use("/api/leaderboard", leaderRoutes);
 app.use("/api/dashboard", quizRoutes);
